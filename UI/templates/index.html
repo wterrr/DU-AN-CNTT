@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .search-box {
+      width: 400px;
+      height: 30px;
+      font-size: 16px;
+      padding: 5px;
+    }
+    .results {
+      list-style-type: none;
+      padding: 0;
+    }
+    .results li {
+      margin-bottom: 10px;
+    }
+    .results a {
+      text-decoration: none;
+      color: #000;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+  <input class="search-box" placeholder="Search...">
+  <ul class="results"></ul>
+  <script>
+    $(document).ready(function() {
+      let debounce;
+      $('.search-box').on('keyup', function () {
+        clearTimeout(debounce);
+        debounce = setTimeout(() => {
+          getSearchResults();  
+        }, 300);
+      });
+    });
+
+    function getSearchResults() {
+      const query = $('.search-box').val();
+      // Replace the URL with your actual search endpoint
+      fetch(`http://localhost:5000/search?q=${encodeURIComponent(query.trim())}`)
+        .then((resp) => resp.json())
+        .then((data) => {
+          $('.results').empty();
+          for (let i = 0; i < data.length; i++) {
+            $('.results').append(`<li><a href='/chitietbenh/${data[i]}'>${data[i]}</a></li>`);
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching search results:', error);
+        });
+    }
+  </script>
+  <script>
+    function clearSearchResults() {
+      $('.search-box').val('');
+      $('.results').empty();
+    }
+  </script>
+</body>
+</html>
