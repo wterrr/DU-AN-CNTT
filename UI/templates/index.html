@@ -44,7 +44,6 @@
 
     function getSearchResults() {
       const query = $('.search-box').val();
-      // Replace the URL with your actual search endpoint
       fetch(`http://localhost:5000/search?q=${encodeURIComponent(query.trim())}`)
         .then((resp) => resp.json())
         .then((data) => {
