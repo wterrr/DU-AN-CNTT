@@ -47,7 +47,6 @@ def details(slap):
 
     return render_template('details.html', slap=slap, results=results)
 
-# Thiết lập khóa API của bạn
 openai.api_key = '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'
 
 @app.route("/send-message", methods=['POST'])
@@ -56,7 +55,7 @@ def send_message():
     message = request_data['message']
     details = request_data['details']
     
-    # Sử dụng thông tin từ details-container ở đây để cung cấp dữ liệu cho API trả lời câu hỏi
+    # Sử dụng thông tin từ details-container để cung cấp dữ liệu cho API trả lời câu hỏi
     
     response = openai.Completion.create(
         engine='gpt-3.5-turbo-instruct',
