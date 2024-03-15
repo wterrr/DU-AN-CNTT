@@ -103,7 +103,8 @@
     <h1>Chi tiết về bệnh {{slap}}</h1>
     <div class="details-container">
         {% for key, value in results[0].items() %}
-            <div class="detail-item">
+            
+            <div class="detail-item-{{ loop.index }}">
                 <span class="detail-label">{{ key | replace("_", " ") }}:</span> {{ value }}
             </div>
         {% endfor %}
@@ -115,7 +116,7 @@
             <button class="close-btn" onclick="toggleChatBox()">Close</button>
         </div>
         <div class="chat-messages" id="chatMessages">
-            <!-- Dòng này sẽ hiển thị câu trả lời từ server -->
+            <!-- hiển thị câu trả lời từ server -->
         </div>
         <form onsubmit="sendMessage(); return false;">
             <div class="chat-input">
@@ -141,12 +142,12 @@
             var message = messageInput.value.trim();
             
             // Lấy thông tin từ details-container
-            var detailsContainer = document.querySelector('.details-container');
-            var detailsText = detailsContainer.textContent.trim();
+            var detailsContainer = document.querySelector('.detail-item-1');
+            var nameMedical = detailsContainer.textContent.trim();
             
             if (message !== '') {
                 var messageElement = document.createElement('div');
-                messageElement.textContent = message;
+                messageElement.textContent = '🤵: '+message;
                 chatMessages.appendChild(messageElement);
         
                 // Gửi yêu cầu đến endpoint mới
@@ -157,13 +158,13 @@
                     if (xhr.readyState === 4 && xhr.status === 200) {
                         var response = JSON.parse(xhr.responseText);
                         var answerElement = document.createElement('div');
-                        answerElement.textContent = response.answer;
+                        answerElement.textContent = '🤖: '+response.answer;
                         chatMessages.appendChild(answerElement);
                     }
                 };
                 
                 // Gửi tin nhắn và thông tin từ details-container đến máy chủ
-                xhr.send(JSON.stringify({ message: message, details: detailsText }));
+                xhr.send(JSON.stringify({ message: message, details: nameMedical }));
         
                 // Xóa nội dung khung nhập sau khi gửi tin nhắn
                 messageInput.value = '';
